@@ -32,7 +32,7 @@
 #ifndef LBCRYPTO_CRYPTO_BASE_FHE_H
 #define LBCRYPTO_CRYPTO_BASE_FHE_H
 
-#include "binfhecontext.h"
+// BinFHE removed for CKKS-only build
 #include "ciphertext-fwd.h"
 #include "cryptocontext-fwd.h"
 #include "key/evalkey-fwd.h"

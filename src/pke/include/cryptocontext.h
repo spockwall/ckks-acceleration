@@ -36,7 +36,7 @@
 #ifndef SRC_PKE_CRYPTOCONTEXT_H_
 #define SRC_PKE_CRYPTOCONTEXT_H_
 
-#include "binfhecontext.h"
+// BinFHE removed for CKKS-only build
 #include "ciphertext.h"
 #include "cryptocontextfactory.h"
 #include "cryptocontext-fwd.h"

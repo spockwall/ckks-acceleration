@@ -56,22 +56,10 @@
 #include "keyswitch/keyswitch-bv.h"
 #include "keyswitch/keyswitch-hybrid.h"
 
-#include "scheme/bgvrns/bgvrns-cryptoparameters.h"
-#include "scheme/bgvrns/bgvrns-parametergeneration.h"
-#include "scheme/bgvrns/bgvrns-pke.h"
-#include "scheme/bgvrns/bgvrns-pre.h"
-#include "scheme/bgvrns/bgvrns-leveledshe.h"
-#include "scheme/bgvrns/bgvrns-advancedshe.h"
-#include "scheme/bgvrns/bgvrns-multiparty.h"
-#include "scheme/bgvrns/bgvrns-fhe.h"
-#include "scheme/bgvrns/bgvrns-scheme.h"
-
-#include "scheme/bfvrns/bfvrns-scheme.h"
+// CKKS-only OpenFHE build
 #include "scheme/ckksrns/ckksrns-scheme.h"
 
 #include "gen-cryptocontext.h"
 #include "scheme/ckksrns/gen-cryptocontext-ckksrns.h"
-#include "scheme/bfvrns/gen-cryptocontext-bfvrns.h"
-#include "scheme/bgvrns/gen-cryptocontext-bgvrns.h"
 
 #endif /* SRC_LIB_OPENFHE_H_ */

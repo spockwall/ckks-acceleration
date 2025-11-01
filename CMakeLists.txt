@@ -688,10 +688,10 @@ if(BUILD_UNITTESTS)
     set(UNITTESTMAIN ${PROJECT_SOURCE_DIR}/test/Main_TestAll.cpp)
 endif()
 
-### add each of the subdirs of src
+### add each of the subdirs of src (CKKS-only build)
 add_subdirectory(src/core)
 add_subdirectory(src/pke)
-add_subdirectory(src/binfhe)
+# BinFHE removed for CKKS-only build
 
 ### build the google test handlers
 if(BUILD_UNITTESTS)
@@ -729,14 +729,13 @@ add_custom_target(clobber COMMAND make clean WORKING_DIRECTORY ${CMAKE_CURRENT_B
 
 if(BUILD_UNITTESTS)
     add_custom_target(testall
-        DEPENDS core_tests pke_tests  binfhe_tests
+        DEPENDS core_tests pke_tests
         COMMAND echo core: && unittest/core_tests -t || true
-        COMMAND echo pke: && unittest/pke_tests -t || true
-        COMMAND echo binfhe: && unittest/binfhe_tests -t)
+        COMMAND echo pke: && unittest/pke_tests -t || true)
 endif()
 
 if(BUILD_EXAMPLES)
-    add_custom_target(allexamples DEPENDS allcoreexamples allpkeexamples allbinfheexamples)
+    add_custom_target(allexamples DEPENDS allcoreexamples allpkeexamples)
 endif()
 
 if(BUILD_EXTRAS)
