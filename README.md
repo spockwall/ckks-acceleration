@@ -26,31 +26,83 @@ This repository is a simplified, CKKS-only version of OpenFHE, focused on perfor
 - **OS**: Linux, macOS, or Windows
 - **OpenMP**: Recommended for parallelization (optional)
 
-## Quick Start: Build, Run Examples, and Tests
+## Quick Start: Building the Library
 
-### 1. Build the Library
+### Using the Makefile (Recommended)
 
-**Quick build (using Makefile - recommended):**
+This repository includes a smart Makefile that automates the entire build process. It automatically detects your OS, CPU cores, and configures CMake with the correct settings for CKKS-only builds.
+
+**Build the library (one command):**
 ```bash
-make              # Automatically detects OS and builds with optimal settings
-make info         # Show available build targets
+make
 ```
 
-**Alternative: Manual CMake build:**
+**What happens when you run `make`:**
+```
+Creating build directory and configuring with CMake...
+Building OpenFHE CKKS libraries with 10 parallel jobs...
+[  0%] Building core library...
+[ 44%] Built target OPENFHEcore
+[100%] Building CKKS/PKE library...
+[100%] Built target OPENFHEpke
+Build complete! Libraries are in build/lib/
+```
+
+The Makefile automatically:
+- Detects your OS (macOS/Linux)
+- Detects available CPU cores for parallel compilation
+- Creates the `build/` directory
+- Configures CMake with CKKS-only settings (no unit tests, benchmarks, or examples)
+- Compiles the libraries using all available cores
+- Shows completion message with library location
+
+**Available Makefile targets:**
+
+| Command | Description |
+|---------|-------------|
+| `make` | Build CKKS libraries (default target) |
+| `make info` | Show build configuration and available targets |
+| `make clean` | Remove the entire build directory |
+| `make rebuild` | Clean and rebuild from scratch |
+| `make config` | Run CMake configuration only (no build) |
+| `make examples` | Build with CKKS examples enabled |
+| `make tests` | Build with unit tests (⚠️ may fail due to removed BFV/BGV) |
+| `make install` | Install libraries system-wide (requires sudo) |
+| `make help` | Show build information (same as `make info`) |
+
+**Common workflows:**
+
+```bash
+# First time build
+make
+
+# View build information
+make info
+
+# Rebuild after making code changes
+make rebuild
+
+# Build with examples to test CKKS functionality
+make examples
+
+# Clean up everything
+make clean
+```
+
+### Manual CMake Build (Alternative)
+
+If you prefer manual control or need custom CMake options:
+
 ```bash
 mkdir build
 cd build
-cmake .. -DBUILD_UNITTESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_BENCHMARKS=OFF
-make -j$(nproc)  # Linux
-make -j$(sysctl -n hw.ncpu)  # macOS
-```
 
-**Other Makefile targets:**
-```bash
-make clean        # Remove build directory
-make rebuild      # Clean and rebuild from scratch
-make examples     # Build with CKKS examples
-make install      # Install libraries system-wide
+# Basic CKKS-only build
+cmake .. -DBUILD_UNITTESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_BENCHMARKS=OFF
+
+# Build with parallel jobs
+make -j$(nproc)      # Linux
+make -j$(sysctl -n hw.ncpu)  # macOS
 ```
 
 **Build options you can customize:**
@@ -65,28 +117,34 @@ make install      # Install libraries system-wide
 - `-DBUILD_EXAMPLES=ON|OFF` - Build example programs
 - `-DBUILD_UNITTESTS=ON|OFF` - Build unit tests
 
-### 2. Run Examples
+### Running CKKS Examples
 
-After building, examples are located in `build/bin/examples/`:
+By default, examples are **not built** to speed up compilation. To build and run examples:
 
 ```bash
-# Run a simple CKKS example
+# Build with examples enabled
+make examples
+
+# Run examples (executables are in build/bin/examples/pke/)
 ./build/bin/examples/pke/simple-real-numbers
-
-# Run CKKS bootstrapping example
 ./build/bin/examples/pke/simple-ckks-bootstrapping
-
-# Run advanced real numbers example
 ./build/bin/examples/pke/advanced-real-numbers
 
 # List all available examples
 ls build/bin/examples/pke/
 ```
 
-### 3. Run Unit Tests
+**Note**: Some examples may reference BFV/BGV schemes that were removed in this CKKS-only build and will fail to compile.
+
+### Running Unit Tests
+
+By default, unit tests are **not built** (many reference removed BFV/BGV schemes). To attempt building tests:
 
 ```bash
-# Run all unit tests
+# Build with unit tests (⚠️ may fail due to BFV/BGV dependencies)
+make tests
+
+# If successful, run tests
 cd build
 make testall
 
@@ -95,17 +153,26 @@ make testall
 ./unittest/pke_tests     # PKE/CKKS scheme tests
 ```
 
-### 4. Install (Optional)
+### Installing the Library
 
 To install the library system-wide:
+
 ```bash
+# Install using Makefile (recommended)
+make install          # May require sudo
+
+# Or install from build directory
 cd build
-sudo make install  # Installs to /usr/local by default
+sudo make install     # Installs to /usr/local by default
 ```
 
-Or install to a custom location:
+Install to a custom location:
+
 ```bash
+# From build directory
+cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=/your/custom/path
+make
 make install
 ```
 
@@ -117,31 +184,6 @@ make install
  * [BSD 2-Clause License](LICENSE)
 
 ## Project Architecture
-
-### Directory Structure
-
-```
-ckks-acceleration/
-├── src/
-│   ├── core/              # Core math and lattice operations
-│   │   ├── include/       # Public headers (math backends, lattices, utilities)
-│   │   └── lib/           # Implementation files
-│   └── pke/               # Public Key Encryption (CKKS scheme)
-│       ├── include/       # CKKS headers
-│       │   ├── scheme/ckksrns/     # CKKS-RNS implementation
-│       │   ├── schemebase/         # Base classes for all schemes
-│       │   └── keyswitch/          # Key switching techniques
-│       ├── lib/           # CKKS implementation
-│       ├── examples/      # CKKS usage examples
-│       └── unittest/      # Unit tests (disabled in this build)
-├── third-party/           # External dependencies
-│   ├── cereal/           # Serialization library
-│   ├── google-test/      # Testing framework
-│   └── google-benchmark/ # Benchmarking framework
-├── build/                 # Build output directory (created by CMake)
-│   └── lib/              # Compiled libraries (libOPENFHEcore, libOPENFHEpke)
-└── CMakeLists.txt        # Main build configuration
-```
 
 ### Key Components
 
