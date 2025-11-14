@@ -36,7 +36,6 @@
 #include "key/evalkey-fwd.h"
 #include "key/keypair.h"
 #include "keyswitch/keyswitch-base.h"
-#include "scheme/scheme-swch-params.h"
 #include "schemebase/base-advancedshe.h"
 #include "schemebase/base-fhe.h"
 #include "schemebase/base-leveledshe.h"
@@ -1228,130 +1227,6 @@ public:
                                               size_t precomp = 0) {
         VerifyFHEEnabled(__func__);
         return m_FHE->EvalHermiteTrigSeries(ciphertext, coefficientsCheb, a, b, coefficientsHerm, precomp);
-    }
-
-    // SCHEMESWITCHING methods
-
-    LWEPrivateKey EvalCKKStoFHEWSetup(const SchSwchParams& params) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalCKKStoFHEWSetup(params);
-    }
-
-    std::shared_ptr<std::map<uint32_t, EvalKey<Element>>> EvalCKKStoFHEWKeyGen(const KeyPair<Element>& keyPair,
-                                                                               ConstLWEPrivateKey& lwesk) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalCKKStoFHEWKeyGen(keyPair, lwesk);
-    }
-
-    void EvalCKKStoFHEWPrecompute(const CryptoContextImpl<Element>& cc, double scale = 1.0) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalCKKStoFHEWPrecompute(cc, scale);
-    }
-
-    std::vector<std::shared_ptr<LWECiphertextImpl>> EvalCKKStoFHEW(ConstCiphertext<Element>& ciphertext,
-                                                                   uint32_t numCtxts = 0) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalCKKStoFHEW(ciphertext, numCtxts);
-    }
-
-    void EvalFHEWtoCKKSSetup(const CryptoContextImpl<Element>& ccCKKS, const std::shared_ptr<BinFHEContext>& ccLWE,
-                             uint32_t numSlotsCKKS = 0, uint32_t logQ = 25) {
-        VerifySchemeSwitchEnabled(__func__);
-        m_SchemeSwitch->EvalFHEWtoCKKSSetup(ccCKKS, ccLWE, numSlotsCKKS, logQ);
-    }
-
-    std::shared_ptr<std::map<uint32_t, EvalKey<Element>>> EvalFHEWtoCKKSKeyGen(const KeyPair<Element>& keyPair,
-                                                                               ConstLWEPrivateKey& lwesk,
-                                                                               uint32_t numSlots = 0,
-                                                                               uint32_t numCtxts = 0, uint32_t dim1 = 0,
-                                                                               uint32_t L = 0) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalFHEWtoCKKSKeyGen(keyPair, lwesk, numSlots, numCtxts, dim1, L);
-    }
-
-    void EvalCompareSwitchPrecompute(const CryptoContextImpl<Element>& ccCKKS, uint32_t pLWE = 0,
-                                     double scaleSign = 1.0, bool unit = false) {
-        VerifySchemeSwitchEnabled(__func__);
-        m_SchemeSwitch->EvalCompareSwitchPrecompute(ccCKKS, pLWE, scaleSign, unit);
-    }
-
-    Ciphertext<Element> EvalFHEWtoCKKS(std::vector<std::shared_ptr<LWECiphertextImpl>>& LWECiphertexts,
-                                       uint32_t numCtxts = 0, uint32_t numSlots = 0, uint32_t p = 4, double pmin = 0.0,
-                                       double pmax = 2.0, uint32_t dim1 = 0) const {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalFHEWtoCKKS(LWECiphertexts, numCtxts, numSlots, p, pmin, pmax, dim1);
-    }
-
-    LWEPrivateKey EvalSchemeSwitchingSetup(const SchSwchParams& params) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalSchemeSwitchingSetup(params);
-    }
-
-    std::shared_ptr<std::map<uint32_t, EvalKey<Element>>> EvalSchemeSwitchingKeyGen(const KeyPair<Element>& keyPair,
-                                                                                    ConstLWEPrivateKey& lwesk) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalSchemeSwitchingKeyGen(keyPair, lwesk);
-    }
-
-    Ciphertext<Element> EvalCompareSchemeSwitching(ConstCiphertext<Element>& ciphertext1,
-                                                   ConstCiphertext<Element>& ciphertext2, uint32_t numCtxts = 0,
-                                                   uint32_t numSlots = 0, uint32_t pLWE = 0, double scaleSign = 1.0,
-                                                   bool unit = false) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalCompareSchemeSwitching(ciphertext1, ciphertext2, numCtxts, numSlots, pLWE, scaleSign,
-                                                          unit);
-    }
-
-    std::vector<Ciphertext<Element>> EvalMinSchemeSwitching(ConstCiphertext<Element>& ciphertext,
-                                                            PublicKey<Element> publicKey, uint32_t numValues = 0,
-                                                            uint32_t numSlots = 0, uint32_t pLWE = 0,
-                                                            double scaleSign = 1.0) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalMinSchemeSwitching(ciphertext, publicKey, numValues, numSlots, pLWE, scaleSign);
-    }
-
-    std::vector<Ciphertext<Element>> EvalMinSchemeSwitchingAlt(ConstCiphertext<Element>& ciphertext,
-                                                               PublicKey<Element> publicKey, uint32_t numValues = 0,
-                                                               uint32_t numSlots = 0, uint32_t pLWE = 0,
-                                                               double scaleSign = 1.0) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalMinSchemeSwitchingAlt(ciphertext, publicKey, numValues, numSlots, pLWE, scaleSign);
-    }
-
-    std::vector<Ciphertext<Element>> EvalMaxSchemeSwitching(ConstCiphertext<Element>& ciphertext,
-                                                            PublicKey<Element> publicKey, uint32_t numValues = 0,
-                                                            uint32_t numSlots = 0, uint32_t pLWE = 0,
-                                                            double scaleSign = 1.0) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalMaxSchemeSwitching(ciphertext, publicKey, numValues, numSlots, pLWE, scaleSign);
-    }
-
-    std::vector<Ciphertext<Element>> EvalMaxSchemeSwitchingAlt(ConstCiphertext<Element>& ciphertext,
-                                                               PublicKey<Element> publicKey, uint32_t numValues = 0,
-                                                               uint32_t numSlots = 0, uint32_t pLWE = 0,
-                                                               double scaleSign = 1.0) {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->EvalMaxSchemeSwitchingAlt(ciphertext, publicKey, numValues, numSlots, pLWE, scaleSign);
-    }
-
-    std::shared_ptr<lbcrypto::BinFHEContext> GetBinCCForSchemeSwitch() {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->GetBinCCForSchemeSwitch();
-    }
-
-    void SetBinCCForSchemeSwitch(std::shared_ptr<lbcrypto::BinFHEContext> ccLWE) {
-        VerifySchemeSwitchEnabled(__func__);
-        m_SchemeSwitch->SetBinCCForSchemeSwitch(ccLWE);
-    }
-
-    Ciphertext<Element> GetSwkFC() {
-        VerifySchemeSwitchEnabled(__func__);
-        return m_SchemeSwitch->GetSwkFC();
-    }
-
-    void SetSwkFC(Ciphertext<Element> FHEWtoCKKSswk) {
-        VerifySchemeSwitchEnabled(__func__);
-        m_SchemeSwitch->SetSwkFC(FHEWtoCKKSswk);
     }
 
     template <class Archive>

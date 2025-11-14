@@ -33,8 +33,6 @@
 
 #include "config_core.h"
 #include "scheme/ckksrns/gen-cryptocontext-ckksrns.h"
-#include "scheme/bfvrns/gen-cryptocontext-bfvrns.h"
-#include "scheme/bgvrns/gen-cryptocontext-bgvrns.h"
 #include "scheme/gen-cryptocontext-params.h"
 
 #include "utils/exception.h"
@@ -88,32 +86,7 @@ public:
      * @param vec vector with overrides
      * @return number of all data members of Params or number of vec's elements that can override params
      */
-    // size_t populateCryptoContextParams(const std::vector<std::string>::const_iterator& start) {
-    //    // get the total number of the parameter override values
-    //    size_t numOverrides = lbcrypto::Params::getAllParamsDataMembers().size();
-
-    //    // get the subset of elements with the parameter override values
-    //    std::vector<std::string> overrideValues(start, start + numOverrides);
-
-    //    lbcrypto::SCHEME scheme = lbcrypto::convertToSCHEME(*start);
-    //    switch (scheme) {
-    //    case lbcrypto::CKKSRNS_SCHEME:
-    //        setCryptoContextParams(std::make_shared<lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS>>(overrideValues));
-    //        break;
-    //    case lbcrypto::BFVRNS_SCHEME:
-    //        setCryptoContextParams(std::make_shared<lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>>(overrideValues));
-    //        break;
-    //    case lbcrypto::BGVRNS_SCHEME:
-    //        setCryptoContextParams(std::make_shared<lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS>>(overrideValues));
-    //        break;
-    //    default: {
-    //        std::string errMsg(std::string("Unknown schemeId ") + std::to_string(scheme));
-    //        OPENFHE_THROW(errMsg);
-    //    }
-    //    }
-
-    //    return numOverrides;
-    //}
+    
 
     size_t setCryptoContextParamsOverrides(const std::vector<std::string>::const_iterator& start) {
         // get the total number of the parameter override values

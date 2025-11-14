@@ -42,7 +42,7 @@
 #include "scheme/ckksrns/ckksrns-parametergeneration.h"
 #include "scheme/ckksrns/ckksrns-pke.h"
 #include "scheme/ckksrns/ckksrns-pre.h"
-#include "scheme/ckksrns/ckksrns-schemeswitching.h"
+// #include "scheme/ckksrns/ckksrns-schemeswitching.h"  // Scheme-switching removed for CKKS-only build
 
 #include <memory>
 #include <string>
